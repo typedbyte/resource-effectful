@@ -23,14 +23,14 @@ module Effectful.Resource
   , Key
   , InvalidKey(..)
   , manage
+  , manageEff
   , allocate
+  , allocateEff
   , free
   , freeAll
   , move
   , move_
   , defer
-  , manageEff
-  , allocateEff
   , deferEff
   ) where
 
