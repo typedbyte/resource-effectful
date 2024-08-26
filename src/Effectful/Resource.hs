@@ -23,12 +23,15 @@ module Effectful.Resource
   , Key
   , InvalidKey(..)
   , manage
+  , manageEff
   , allocate
+  , allocateEff
   , free
   , freeAll
   , move
   , move_
   , defer
+  , deferEff
   ) where
 
 -- base
@@ -174,7 +177,7 @@ manage
   -> (a -> IO b) -- ^ The computation which releases the resource.
   -> Eff es a    -- ^ The acquired resource.
 manage create destroy =
-  fmap fst $ allocate create destroy
+  fst <$> allocate create destroy
 
 -- | Moves a resource to the specified region, yielding a new key for the resource.
 -- The old key is invalid after the movement.
@@ -209,8 +212,36 @@ free = unsafeEff_ . uninterruptibleMask_ . freeIO
 freeAll :: Foldable t => t Key -> Eff es ()
 freeAll = unsafeEff_ . uninterruptibleMask_ . mapM_ freeIO
 
--- | Associats a cleanup action with the current region which is executed when the
+-- | Associates a cleanup action with the current region which is executed when the
 -- region is closed.
 defer :: Resource :> es => IO a -> Eff es ()
 defer action =
   manage (pure ()) (const action)
+
+-- | Allocates a resource in the current region which can be moved and freed
+-- manually using its key.
+allocateEff
+  :: Resource :> es
+  => Eff es a        -- ^ The computation which acquires the resource.
+  -> (a -> Eff es b) -- ^ The computation which releases the resource.
+  -> Eff es (a, Key) -- ^ The acquired resource and its corresponding key.
+allocateEff create destroy = do
+  Resource region <- getStaticRep
+  unsafeSeqUnliftIO $ \run ->
+    manageIO region (run create) (run . void . destroy)
+
+-- | Allocates a resource in the current region which is automatically freed at
+-- the end of the region.
+manageEff 
+  :: Resource :> es
+  => Eff es a        -- ^ The computation which acquires the resource.
+  -> (a -> Eff es b) -- ^ The computation which releases the resource.
+  -> Eff es a        -- ^ The acquired resource.
+manageEff create destroy =
+  fst <$> allocateEff create destroy
+
+-- | Associates a cleanup action with the current region which is executed when the
+-- region is closed.
+deferEff :: Resource :> es => Eff es a -> Eff es ()
+deferEff action =
+  manageEff (pure ()) (const action)
