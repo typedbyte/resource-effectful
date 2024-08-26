@@ -228,7 +228,7 @@ allocateEff
 allocateEff create destroy = do
   Resource region <- getStaticRep
   unsafeSeqUnliftIO $ \run ->
-    manageIO region (run create) (run . const (pure ()) . destroy)
+    manageIO region (run create) (run . void . destroy)
 
 -- | Allocates a resource in the current region which is automatically freed at
 -- the end of the region.
