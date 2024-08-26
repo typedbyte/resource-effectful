@@ -177,7 +177,7 @@ manage
   -> (a -> IO b) -- ^ The computation which releases the resource.
   -> Eff es a    -- ^ The acquired resource.
 manage create destroy =
-  fmap fst $ allocate create destroy
+  fst <$> allocate create destroy
 
 -- | Moves a resource to the specified region, yielding a new key for the resource.
 -- The old key is invalid after the movement.
