@@ -191,12 +191,18 @@ testMoveReturnValue = do
     -- Make sure keys are different
     liftIO $ assertBool "Move should return a new key" (key1 /= key2)
 
-    -- Test that the original key is invalid
-    let testInvalidOriginalKey = runEff $ runResource $ free key1
-    result <- liftIO $ try @InvalidKey testInvalidOriginalKey
-    case result of
-      Left _ -> liftIO $ putStrLn "Original key correctly invalid after move"
-      Right _ -> liftIO $ assertFailure "Expected InvalidKey exception but none was thrown"
+  -- Test that the original key is invalid (moved to separate block)
+  let testInvalidOriginalKey = runEff $ runResource $ do
+        (_, key1) <- allocate (return "dummy") (\_ -> return ())
+        region <- currentRegion
+        _ <- move key1 region  -- Using _ to explicitly ignore the return value
+        free key1 -- This should throw InvalidKey
+
+  -- Capture the exception without printing anything
+  result <- try @InvalidKey testInvalidOriginalKey
+  case result of
+    Left _ -> return () -- Expected InvalidKey exception, silently pass
+    Right _ -> assertFailure "Expected InvalidKey exception but none was thrown"
 
   -- After the test, check that the resource was actually freed
   events <- readIORef logRef

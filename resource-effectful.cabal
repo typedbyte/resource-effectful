@@ -1,6 +1,6 @@
 cabal-version:   3.0
 name:            resource-effectful
-version:         0.1.0.0
+version:         0.1.0.1
 synopsis:        A region-based resource effect for the effectful ecosystem.
 description:     Please see the README on GitHub at <https://github.com/typedbyte/resource-effectful#readme>
 homepage:        https://github.com/typedbyte/resource-effectful
@@ -9,7 +9,7 @@ license:         BSD-3-Clause
 license-file:    LICENSE
 author:          Michael Szvetits
 maintainer:      typedbyte@qualified.name
-copyright:       2023 Michael Szvetits
+copyright:       2025 Michael Szvetits
 category:        Control
 build-type:      Simple
 extra-doc-files:
@@ -27,7 +27,7 @@ library
   import: shared-properties
   hs-source-dirs: src
   build-depends:
-      effectful-core >= 2.0 && < 2.3
+      effectful-core >= 2.0 && < 2.6
     , stm            >= 2.5 && < 2.6
   exposed-modules:
       Effectful.Resource
@@ -40,7 +40,7 @@ test-suite resource-effectful-test
                        Test.Effectful.ResourceExtended
   build-depends:
       resource-effectful
-    , effectful-core >= 2.0 && < 2.3
+    , effectful-core >= 2.0 && < 2.6
     , tasty
     , tasty-hunit
     , stm
