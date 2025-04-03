@@ -30,8 +30,7 @@ jobs:
       id: setup-haskell-cabal
       with:
         ghc-version: ${{ matrix.ghc }}
-    - name: Update cabal package database
-      run: cabal update
+        cabal-update: true  # This runs 'cabal update' automatically
     - uses: actions/cache@v4
       name: Cache cabal stuff
       with:
@@ -66,8 +65,7 @@ jobs:
       id: setup-haskell-cabal
       with:
         ghc-version: 'latest'
-    - name: Update cabal package database
-      run: cabal update
+        cabal-update: true
     - uses: actions/cache@v4
       name: Cache cabal stuff
       with:
