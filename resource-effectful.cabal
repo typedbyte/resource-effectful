@@ -45,5 +45,3 @@ test-suite resource-effectful-test
     , tasty-hunit
     , stm
   hs-source-dirs:      test
-  ghc-options:         -Wall
-                       -fhpc
