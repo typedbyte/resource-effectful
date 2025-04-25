@@ -17,9 +17,6 @@ import Effectful.Resource
 import Test.Tasty
 import Test.Tasty.HUnit
 
--- Main test suite
-main :: IO ()
-main = defaultMain tests
 
 tests :: TestTree
 tests = testGroup "Effectful.Resource"
