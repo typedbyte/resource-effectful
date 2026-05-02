@@ -4,7 +4,6 @@
 
 * Add unit tests.
 * Bump dependency on effectful to < 2.6
-* Add stack file.
 
 ## 0.1.0.0 -- 2023-05-12
 
