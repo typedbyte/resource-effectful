@@ -1,6 +1,6 @@
 cabal-version:   3.0
 name:            resource-effectful
-version:         0.1.0.1
+version:         0.1.1.0
 synopsis:        A region-based resource effect for the effectful ecosystem.
 description:     Please see the README on GitHub at <https://github.com/typedbyte/resource-effectful#readme>
 homepage:        https://github.com/typedbyte/resource-effectful
@@ -45,3 +45,7 @@ test-suite resource-effectful-test
     , tasty-hunit
     , stm
   hs-source-dirs:      test
+
+source-repository head
+  type:     git
+  location: https://github.com/typedbyte/resource-effectful.git

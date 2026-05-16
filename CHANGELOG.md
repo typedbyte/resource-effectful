@@ -1,5 +1,9 @@
 # Revision history for resource-effectful
 
+## 0.1.1.0 -- 2026-05-16
+
+* Hackage release with Eff-functions.
+
 ## 0.1.0.1 -- 2025-04-03
 
 * Add unit tests.
